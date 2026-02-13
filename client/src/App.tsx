@@ -92,6 +92,34 @@ function App() {
   // Simkl import
   const [importing, setImporting] = useState(false);
   const [showImport, setShowImport] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [showRefreshModal, setShowRefreshModal] = useState(false);
+
+  // ... (data fetching)
+
+  const handleRefreshMetadata = async (provider: 'tmdb' | 'rpdb') => {
+    setRefreshing(true);
+    setShowRefreshModal(false);
+    try {
+      const res = await fetch('/api/library/metadata/refresh', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ provider }),
+      });
+      if (!res.ok) throw new Error('Refresh failed');
+      const data = await res.json();
+      console.log(data.message);
+
+      // Poll for updates
+      setTimeout(() => {
+        setRefreshing(false);
+        fetchLibrary();
+      }, 5000);
+    } catch (err: any) {
+      setError(err.message);
+      setRefreshing(false);
+    }
+  };
 
   // ---------- data fetching ----------
 
@@ -378,6 +406,9 @@ function App() {
             )}
           </div>
 
+          <button className="btn-icon" onClick={() => setShowRefreshModal(true)} title="Refresh Metadata" disabled={refreshing}>
+            {refreshing ? <div className="spinner" style={{ width: 14, height: 14, borderTopColor: 'currentColor' }} /> : '🔄'}
+          </button>
           <button className="btn-icon" onClick={() => setShowImport(true)} title="Import from Simkl" id="import-btn">📥</button>
           <select className="format-dropdown-sm" value={selectedFormat} onChange={(e) => setSelectedFormat(e.target.value)}>
             {formats.map((f) => <option key={f.id} value={f.id}>{f.label}</option>)}
@@ -547,11 +578,57 @@ function App() {
           </div>
         </div>
       )}
+      {showRefreshModal && (
+        <RefreshModal
+          onClose={() => setShowRefreshModal(false)}
+          onConfirm={handleRefreshMetadata}
+          refreshing={refreshing}
+        />
+      )}
     </div>
   );
 }
 
 /* ---------- Edit Modal Component ---------- */
+
+function RefreshModal({ onClose, onConfirm, refreshing }: { onClose: () => void; onConfirm: (provider: 'tmdb' | 'rpdb') => void; refreshing: boolean }) {
+  const [provider, setProvider] = useState<'tmdb' | 'rpdb'>('tmdb');
+
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '400px' }}>
+        <div className="modal-header">
+          <h2>Refresh Metadata</h2>
+          <button className="btn-icon btn-icon-muted" onClick={onClose}>✕</button>
+        </div>
+        <div className="modal-body">
+          <p style={{ marginBottom: '1rem', color: 'var(--text-secondary)' }}>
+            Choose a source for your posters. This will run in the background.
+          </p>
+
+          <div className="modal-field">
+            <label>Poster Source</label>
+            <select value={provider} onChange={(e) => setProvider(e.target.value as any)}>
+              <option value="tmdb">TMDB (High Quality, Standard)</option>
+              <option value="rpdb">RPDB (With Ratings via RPDB_API_KEY)</option>
+            </select>
+          </div>
+
+          <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.5rem' }}>
+            {provider === 'rpdb'
+              ? 'Requires RPDB_API_KEY in .env. Overlays ratings on posters.'
+              : 'Uses official TMDB posters via their API.'}
+          </div>
+        </div>
+        <div className="modal-actions">
+          <button className="btn btn-primary btn-sm" onClick={() => onConfirm(provider)} disabled={refreshing}>
+            {refreshing ? 'Starting...' : 'Start Refresh'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function EditModal({ item, onClose, onUpdate, onDelete }: {
   item: MediaItem;

@@ -229,12 +229,67 @@ app.delete('/api/library/:id', (req, res) => {
     res.status(204).end();
 });
 
+// ---------- metadata refresh ----------
+
+app.post('/api/library/metadata/refresh', async (req, res) => {
+    const { provider = 'tmdb' } = req.body; // 'tmdb' | 'rpdb'
+
+    // 1. Get all items with TMDB IDs
+    const items = repo.getAll().filter((i) => i.tmdbId);
+    console.log(`Refreshing metadata for ${items.length} items using ${provider}...`);
+
+    // Respond immediately to avoid timeout
+    res.json({ message: 'Refresh started', count: items.length });
+
+    // 2. Process in background
+    (async () => {
+        let updatedCount = 0;
+        for (const item of items) {
+            try {
+                // Rate limit roughly: 300ms delay between requests
+                await new Promise((resolve) => setTimeout(resolve, 300));
+
+                let newPoster: string | null = null;
+
+                // Fetch fresh data from TMDB
+                if (item.type === 'movie' || item.type === 'show') {
+                    const details = item.type === 'movie'
+                        ? await getTMDBMovie(item.tmdbId!)
+                        : await getTMDBShow(item.tmdbId!);
+
+                    // Construct new poster URL using our resolution logic
+                    newPoster = getPosterUrl(item.tmdbId, details.poster, item.poster, provider);
+
+                    // Update other fields if needed, but primarily poster for now
+                    if (newPoster !== item.poster) {
+                        repo.update(item.id, { poster: newPoster });
+                        updatedCount++;
+                    }
+                }
+            } catch (err: any) {
+                console.warn(`Failed to refresh ${item.title}: ${err.message}`);
+            }
+        }
+        console.log(`Metadata refresh complete. Updated ${updatedCount} items.`);
+    })();
+});
+
 // ---------- simkl import ----------
+
+// ... types ...
+import { getPosterUrl } from './providers/images.js';
 
 function extractSimklCommonFields(item: any, mediaObj: any, status: string) {
     const ids = mediaObj?.ids ?? {};
     const genres: string[] = mediaObj?.genres ?? [];
-    const posterPath = mediaObj?.poster ? `https://simkl.in/posters/${mediaObj.poster}_m.webp` : '';
+    const simklPoster = mediaObj?.poster ? `https://simkl.in/posters/${mediaObj.poster}_m.webp` : null;
+    const tmdbId = ids.tmdb ?? null;
+
+    // We don't have TMDB poster path here, so pass null for now. 
+    // Default to TMDB (which falls back to Simkl if path is null) 
+    // UNLESS we want imports to use RPDB by default? 
+    // Let's stick to TMDB/Simkl default for imports to be predictable, user can refresh to RPDB.
+    const posterUrl = getPosterUrl(tmdbId, null, simklPoster, 'tmdb');
 
     return {
         title: s(mediaObj?.title),
@@ -243,10 +298,10 @@ function extractSimklCommonFields(item: any, mediaObj: any, status: string) {
         status,
         memo: s(item?.memo ?? ''),
         imdbId: s(ids.imdb ?? ''),
-        tmdbId: ids.tmdb ?? null,
+        tmdbId,
         tvdbId: ids.tvdb ?? null,
         simklId: ids.simkl ?? null,
-        poster: posterPath || null,
+        poster: posterUrl,
         genres,
         runtime: mediaObj?.runtime ?? null,
         certification: s(mediaObj?.certification ?? ''),
