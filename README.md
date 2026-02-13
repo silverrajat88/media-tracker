@@ -51,12 +51,12 @@ A self-hosted personal media tracker to manage your watch history, backed by a l
 4. **Configure Environment**
    Create `server/.env`:
    ```bash
-   PORT=3001
+   PORT=3000
    TMDB_API_KEY=your_tmdb_api_key
    # Optional: Only needed for Simkl Import
    SIMKL_CLIENT_ID=...
    SIMKL_CLIENT_SECRET=...
-   SIMKL_REDIRECT_URI=http://localhost:3001
+   SIMKL_REDIRECT_URI=http://localhost:3000
    ```
 
 5. **Run**
@@ -67,7 +67,7 @@ A self-hosted personal media tracker to manage your watch history, backed by a l
    ```bash
    cd server && npm run dev
    ```
-   Open **http://localhost:3001**.
+   Open **http://localhost:3000**.
 
 ## Quick Start (Makefile)
 

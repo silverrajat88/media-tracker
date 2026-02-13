@@ -18,7 +18,7 @@ const {
     SIMKL_CLIENT_ID,
     SIMKL_CLIENT_SECRET,
     SIMKL_REDIRECT_URI,
-    PORT = '3001',
+    PORT = '3000',
 } = process.env;
 
 // Initialize repository
