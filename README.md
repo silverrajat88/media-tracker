@@ -61,9 +61,22 @@ A self-hosted personal media tracker to manage your watch history, backed by a l
 
 5. **Run**
    ```bash
+   make start
+   ```
+   Or use the manual commands:
+   ```bash
    cd server && npm run dev
    ```
    Open **http://localhost:3001**.
+
+## Quick Start (Makefile)
+
+If you have `make` installed:
+1. `make install` - Install dependencies
+2. `make build` - Build the frontend
+3. `make start` - Run the server
+
+Or just run `make` to do all three in sequence.
 
 ## Data Location
 
