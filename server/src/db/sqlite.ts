@@ -56,7 +56,7 @@ export class SQLiteRepository implements MediaRepository {
             params.push(`%${filters.search}%`);
         }
 
-        sql += ' ORDER BY updated_at DESC';
+        sql += ' ORDER BY created_at DESC';
 
         const rows = this.db.prepare(sql).all(...params) as any[];
         return rows.map(rowToMediaItem);

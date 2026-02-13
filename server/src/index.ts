@@ -260,6 +260,8 @@ app.post('/api/library/metadata/refresh', async (req, res) => {
                     // Construct new poster URL using our resolution logic
                     newPoster = getPosterUrl(item.tmdbId, details.poster, item.poster, provider);
 
+                    console.log(`[Refresh] ${item.title} (ID:${item.tmdbId}): ${item.poster?.substring(0, 20)}... -> ${newPoster?.substring(0, 20)}...`);
+
                     // Update other fields if needed, but primarily poster for now
                     if (newPoster !== item.poster) {
                         repo.update(item.id, { poster: newPoster });
