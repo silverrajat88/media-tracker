@@ -1,36 +1,32 @@
-# 🎬 Simkl Exporter
+# 🎬 Personal Media Tracker
 
-Export and browse your [Simkl](https://simkl.com) watch history — with poster artwork, filters, and CSV download in multiple formats.
+A self-hosted personal media tracker to manage your watch history, backed by a local SQLite database and powered by TMDB & Simkl.
 
-![Dark UI with glassmorphism design](https://img.shields.io/badge/UI-Dark%20Glassmorphism-6c63ff?style=flat-square) ![TypeScript](https://img.shields.io/badge/TypeScript-React%20%2B%20Express-3178c6?style=flat-square)
+![Media Tracker UI](https://img.shields.io/badge/UI-Dark%20Glassmorphism-6c63ff?style=flat-square) ![SQLite](https://img.shields.io/badge/DB-SQLite-003b57?style=flat-square) ![TypeScript](https://img.shields.io/badge/Stack-React%20%2B%20Express-3178c6?style=flat-square)
 
 ## Features
 
-- **📋 Media Browser** — Full-page poster grid showing your movies, shows, and anime with artwork, ratings, genres, and status badges
-- **🔍 5 Filters** — Search by title, filter by type (movie/show/anime), year, status (completed/watching/plan to watch/on hold/dropped), and genre
-- **📄 Pagination** — Configurable page size (12, 24, 48, 96 per page)
-- **⬇ CSV Export** — Download your history as a CSV file with an extensible transformer system:
-  - **Raw** — All 20 fields from Simkl
-  - **Trakt** — Trakt-compatible format for easy import
-- **🔒 Persistent Sessions** — Stays connected across page refreshes (token stored in localStorage)
-- **↻ Refresh** — Re-pull data from Simkl without re-authenticating
-- **🎨 Dark Glassmorphism UI** — Responsive design with poster hover effects, color-coded type badges, and animated status pills
+- **� Local Library** — Your data lives in a local `library.db` (SQLite). You own your data.
+- **🔍 Metadata Search** — Integrated search for Movies & TV (TMDB) and Anime (Jikan/MAL).
+- **➕ Add to Library** — Search and add titles with one click (Plan to Watch, Watching, Completed, etc.).
+- **� Simkl Import** — One-time import to sync your existing Simkl history into your local database.
+- **📊 Media Browser** — Full-page poster grid with filtering by type, status, year, and genre.
+- **⬇ Data Export** — Export your library to CSV (Raw or Trakt-compatible formats).
+- **🚀 Single Server** — Backend serves the React frontend—just run one command.
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|-----------|
-| Frontend | React + TypeScript, Vite |
-| Backend | Express + TypeScript |
-| Styling | Vanilla CSS (dark glassmorphism) |
-| API | Simkl API (OAuth 2.0) |
+- **Frontend**: React, Vite, Vanilla CSS (Dark Glassmorphism)
+- **Backend**: Express, better-sqlite3 (SQLite)
+- **Providers**: TMDB API, Jikan API (Unofficial MAL)
 
 ## Getting Started
 
 ### Prerequisites
 
 - Node.js v18+
-- A [Simkl API app](https://simkl.com/settings/developer/) with Client ID + Secret
+- TMDB API Key (Get one free at [themoviedb.org](https://www.themoviedb.org/settings/api))
+- (Optional) Simkl Client ID/Secret if you want to import history
 
 ### Setup
 
@@ -44,35 +40,46 @@ Export and browse your [Simkl](https://simkl.com) watch history — with poster 
    ```bash
    cd server && npm install
    cd ../client && npm install
+   cd ..
    ```
 
-3. **Configure environment**
+3. **Build Frontend**
    ```bash
-   # server/.env
-   SIMKL_CLIENT_ID=your_client_id
-   SIMKL_CLIENT_SECRET=your_client_secret
-   SIMKL_REDIRECT_URI=http://localhost:3000
+   cd client && npm run build
+   ```
+
+4. **Configure Environment**
+   Create `server/.env`:
+   ```bash
    PORT=3001
+   TMDB_API_KEY=your_tmdb_api_key
+   # Optional: Only needed for Simkl Import
+   SIMKL_CLIENT_ID=...
+   SIMKL_CLIENT_SECRET=...
+   SIMKL_REDIRECT_URI=http://localhost:3001
    ```
 
-4. **Run**
+5. **Run**
    ```bash
-   # Terminal 1 — Backend
    cd server && npm run dev
-
-   # Terminal 2 — Frontend
-   cd client && npx vite --port 3000
    ```
+   Open **http://localhost:3001**.
 
-5. Open **http://localhost:3000**, connect to Simkl, and browse your library!
+## Data Location
 
-## Adding New Export Formats
+Your library is stored in `server/data/library.db`. 
+- **Backup**: Just copy this file.
+- **Inspect**: Use any SQLite viewer (e.g., `sqlite3`, DB Browser for SQLite).
 
-The transformer architecture makes it easy to add new service formats:
+## API Documentation
 
-1. Create a new file in `server/src/transformers/` (e.g., `letterboxd.ts`)
-2. Export a transformer function that maps `SimklRow[]` → `{ headers, rows, filename }`
-3. Register it in `server/src/transformers/index.ts`
+- `GET /api/search?q=...&type=...` — Search TMDB/Jikan
+- `GET /api/library` — Get all items
+- `POST /api/library` — Add item
+- `PATCH /api/library/:id` — Update item
+- `DELETE /api/library/:id` — Remove item
+- `POST /api/library/import/simkl` — Import from Simkl
+- `GET /api/export/csv` — Download CSV
 
 ## License
 
