@@ -12,6 +12,7 @@ A self-hosted personal media tracker to manage your watch history, backed by a l
 - **� Simkl Import** — One-time import to sync your existing Simkl history into your local database.
 - **📊 Media Browser** — Full-page poster grid with filtering by type, status, year, and genre.
 - **⬇ Data Export** — Export your library to CSV (Raw or Trakt-compatible formats).
+- **🖼️ Poster Management** — Choose between **TMDB** (High Quality) or **RPDB** (with ratings) for your library posters.
 - **🚀 Single Server** — Backend serves the React frontend—just run one command.
 
 ## Tech Stack
@@ -57,6 +58,8 @@ A self-hosted personal media tracker to manage your watch history, backed by a l
    SIMKL_CLIENT_ID=...
    SIMKL_CLIENT_SECRET=...
    SIMKL_REDIRECT_URI=http://localhost:3000
+   # Optional: For Rated Posters
+   RPDB_API_KEY=your_rpdb_key
    ```
 
 5. **Run**
