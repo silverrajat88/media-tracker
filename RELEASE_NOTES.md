@@ -20,16 +20,16 @@ I have completed the requested enhancements.
 
 ### Demo
 Here is a recording of the new Home Page animations and interactions:
-![Home Page Animations](/Users/rajatsharma/.gemini/antigravity/brain/717420bd-8bf5-44d5-a78d-7b399d252b3a/home_page_animations_demo_1771032231169.webp)
+![Home Page Animations](docs/assets/home_page_animations_demo_1771032231169.webp)
 
 ### External Search Buttons
 Verified the new external search buttons for Stremio, YouTube, and IMDb:
-![Verified Buttons](/Users/rajatsharma/.gemini/antigravity/brain/717420bd-8bf5-44d5-a78d-7b399d252b3a/external_search_buttons_verified_1771031511280.png)
+![Verified Buttons](docs/assets/external_search_buttons_verified_1771031511280.png)
 
 ## 1. Homepage Sorting
 A new sorting dropdown has been added to the library filter bar, offering 10 sort options including Title, Year, Rating, Date Added, and Runtime.
 
-![Homepage with Sorting](/Users/rajatsharma/.gemini/antigravity/brain/717420bd-8bf5-44d5-a78d-7b399d252b3a/home_page_verify_1771023716445.png)
+![Homepage with Sorting](docs/assets/home_page_verify_1771023716445.png)
 
 ## 2. Refined Detail Page
 The Detail Page has been completely redesigned with a modern look using Lucide icons (replacing emojis) and better layout.
@@ -38,7 +38,7 @@ The Detail Page has been completely redesigned with a modern look using Lucide i
 - **Recommendations:** Horizontal scroll for similar titles.
 - **Poster Actions:** "Edit Details" and "Full Resolution Poster" links.
 
-![New Detail Page](/Users/rajatsharma/.gemini/antigravity/brain/717420bd-8bf5-44d5-a78d-7b399d252b3a/detail_page_verify_1771023791979.png)
+![New Detail Page](docs/assets/detail_page_verify_1771023791979.png)
 
 ## 3. Settings Page & Data Management
 The Settings page was rewritten for better UX and functionality.
@@ -52,7 +52,7 @@ The Settings page was rewritten for better UX and functionality.
 - **Export Section:** Consolidated CSV and Trakt export options.
 - **Danger Zone:** Added a "Clear All Library Data" button with a confirmation step to safely reset your database.
 
-![Settings Page](/Users/rajatsharma/.gemini/antigravity/brain/717420bd-8bf5-44d5-a78d-7b399d252b3a/settings_page_top_1771023739418.png)
+![Settings Page](docs/assets/settings_page_top_1771023739418.png)
 
 ## 4. Stremio Import Fix
 I investigated the "Imported 0 items" issue with Stremio.
@@ -71,7 +71,7 @@ Based on your feedback, I have:
 - **Resized the Poster:** Reduced the poster size on the Detail Page for a more balanced layout.
 - **Fixed Missing Synopsis:** Implemented a "lazy fetch" mechanism. If an item (like those imported from Stremio) is missing its overview, the system now automatically fetches it from TMDB using the IMDB ID when you view the page.
 
-![UI Refinement Check](/Users/rajatsharma/.gemini/antigravity/brain/717420bd-8bf5-44d5-a78d-7b399d252b3a/ui_refinement_check_1771024353506.webp)
+![UI Refinement Check](docs/assets/ui_refinement_check_1771024353506.webp)
 
 ## 6. Real-Debrid Streaming Integration
 I have implemented a full streaming hub using **Real-Debrid** and **Torrentio**.
@@ -88,11 +88,11 @@ I have implemented a full streaming hub using **Real-Debrid** and **Torrentio**.
 - **Detail Page:** Verified that streams are fetched and displayed.
 
 ````carousel
-![Real-Debrid Settings](/Users/rajatsharma/.gemini/antigravity/brain/717420bd-8bf5-44d5-a78d-7b399d252b3a/settings_real_debrid_1771026997811.png)
+![Real-Debrid Settings](docs/assets/settings_real_debrid_1771026997811.png)
 <!-- slide -->
-![Streaming Sources](/Users/rajatsharma/.gemini/antigravity/brain/717420bd-8bf5-44d5-a78d-7b399d252b3a/detail_streaming_sources_1771027341818.png)
+![Streaming Sources](docs/assets/detail_streaming_sources_1771027341818.png)
 <!-- slide -->
-![Stream List](/Users/rajatsharma/.gemini/antigravity/brain/717420bd-8bf5-44d5-a78d-7b399d252b3a/detail_streaming_content_1771027388334.png)
+![Stream List](docs/assets/detail_streaming_content_1771027388334.png)
 ````
 
 ## 7. Bulk Edit Feature
@@ -102,7 +102,7 @@ I implemented a powerful **Bulk Edit** interface using `ag-grid-react`, accessib
 - **Save Changes:** Batch updates are sent to the server.
 - **All Columns:** Supports editing of all database fields including external IDs and metadata.
 
-![Bulk Edit Interface](/Users/rajatsharma/.gemini/antigravity/brain/717420bd-8bf5-44d5-a78d-7b399d252b3a/bulk_edit_page_verification_1771044005661.png)
+![Bulk Edit Interface](docs/assets/bulk_edit_page_verification_1771044005661.png)
 
 ## 8. Calendar Performance Optimization
 Addressed the slow loading time of the Calendar tab.
