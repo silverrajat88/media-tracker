@@ -18,11 +18,14 @@ CREATE TABLE IF NOT EXISTS media_items (
   simkl_id      INTEGER,
   -- Metadata
   poster        TEXT,
+  poster_tmdb   TEXT,
+  poster_rpdb   TEXT,
   genres        TEXT,        -- JSON array stored as string
   runtime       INTEGER,
   overview      TEXT,
   certification TEXT,
   country       TEXT,
+  director      TEXT,
   -- Timestamps
   created_at    TEXT NOT NULL DEFAULT (datetime('now')),
   updated_at    TEXT NOT NULL DEFAULT (datetime('now'))
@@ -34,3 +37,4 @@ CREATE INDEX IF NOT EXISTS idx_media_year   ON media_items(year);
 CREATE INDEX IF NOT EXISTS idx_media_tmdb   ON media_items(tmdb_id);
 CREATE INDEX IF NOT EXISTS idx_media_imdb   ON media_items(imdb_id);
 `;
+

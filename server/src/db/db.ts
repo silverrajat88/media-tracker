@@ -19,6 +19,8 @@ export interface MediaItem {
   simklId: number | null;
   // Metadata
   poster: string | null;
+  posterTmdb?: string | null;
+  posterRpdb?: string | null;
   genres: string[];
   runtime: number | null;
   overview: string | null;
@@ -27,6 +29,7 @@ export interface MediaItem {
   // Timestamps
   createdAt: string;
   updatedAt: string;
+  director?: string | null;
 }
 
 export interface LibraryFilters {
@@ -61,8 +64,17 @@ export interface MediaRepository {
   remove(id: string): void;
 
   /** Bulk upsert (for imports). Returns count of items upserted. */
-  bulkUpsert(items: MediaItem[]): number;
+  bulkUpsert(items: MediaItem[]): { inserted: number; updated: number };
 
   /** Get summary stats */
   getStats(): { total: number; movies: number; series: number };
+
+  /** Clear all items from the library */
+  clearAll(): void;
+
+  /** Get cached calendar data for a month */
+  getCalendar(month: string): { data: any; updatedAt: string } | null;
+
+  /** Set cached calendar data for a month */
+  setCalendar(month: string, data: any): void;
 }

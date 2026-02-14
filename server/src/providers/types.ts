@@ -12,11 +12,15 @@ export interface ProviderResult {
     runtime: number | null;
     certification: string | null;
     country: string | null;
+    backdrop: string | null;
     // Cross-platform IDs
     tmdbId: number | null;
     imdbId: string | null;
     tvdbId: number | null;
     malId: number | null;
+    cast?: { id: number; name: string; character: string; profile: string | null }[];
+    recommendations?: { tmdbId: number; title: string; poster: string | null; year: number | null }[];
+    director?: string | null;
 }
 
 export interface MetadataProvider {

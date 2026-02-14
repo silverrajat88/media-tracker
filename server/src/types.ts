@@ -24,11 +24,12 @@ export interface SimklRow {
     Runtime: string;        // minutes
     Certification: string;
     Country: string;
+    Director?: string;
 }
 
 export const SIMKL_ROW_HEADERS: (keyof SimklRow)[] = [
     'Type', 'Title', 'Year', 'Season', 'Episode', 'EpisodeTitle',
     'WatchedAt', 'UserRating', 'Status', 'Memo',
     'IMDB', 'TMDB', 'TVDB', 'SimklID', 'Slug',
-    'Poster', 'Genres', 'Runtime', 'Certification', 'Country',
+    'Poster', 'Genres', 'Runtime', 'Certification', 'Country', 'Director',
 ];
